@@ -1,51 +1,30 @@
 # ADR 0001: Local Database Choice
 
-**Status:** Proposed
+**Status:** Accepted (revised 2026-11-19)
 **Date:** 2026-05-20
 
 ## Context
 
-Bicapp is offline-first. A workout logger that needs an internet connection to log a set is broken. We need a fast, reliable, local database that can:
+Bicapp is offline-first. A workout logger that needs an internet connection to log a set is broken. We need fast, reliable local storage that works in Expo Go and is easy for contributors.
 
-- Handle thousands of sets / workouts without lag
-- Support reactive queries (UI updates as data changes)
-- Work seamlessly with Expo (no custom dev client unless necessary)
-- Be easy to migrate schemas
+## Options considered
 
-## Options
+- **A — WatermelonDB:** fast and reactive, but needs a custom dev client.
+- **B — Drizzle ORM + expo-sqlite:** type-safe SQL, works in Expo Go, needs a reactive layer.
+- **C — Realm:** heavy; maintenance concerns.
+- **D — Zustand + persist middleware on AsyncStorage:** a single JSON document, reactive by default, zero schema/migration tooling, works everywhere including web.
 
-### Option A — WatermelonDB
+## Decision (v1)
 
-- Built specifically for React Native, optimized for large datasets via lazy loading
-- Reactive out-of-the-box (observables)
-- Requires a custom dev client (not pure Expo Go)
-- More opinionated API
+**Option D.** All state lives in one Zustand store (`src/store/index.ts`) persisted to AsyncStorage.
 
-### Option B — Drizzle ORM + expo-sqlite
+- One user's workout data is small (years of training ≈ a few MB of JSON).
+- Reactivity comes for free; no query cache to maintain.
+- The store's shape is the export/backup format, so backup/restore is trivial.
+- Works identically on iOS, Android and web.
 
-- Type-safe SQL via Drizzle, lightweight
-- Works in Expo Go via `expo-sqlite`
-- Easier migration story (raw SQL migrations)
-- Less batteries-included for reactivity — pair with TanStack Query or a manual cache
+## Consequences / when to revisit
 
-### Option C — Realm (MongoDB)
-
-- Mature, fast, reactive
-- Heavier; recent licensing/maintenance concerns since the Atlas Device Sync sunset
-
-## Decision
-
-**Leaning toward Option B (Drizzle + expo-sqlite)** because:
-
-1. Stays inside Expo Go for as long as possible → easier contributor onboarding
-2. Type-safe SQL fits our TypeScript-first codebase
-3. SQLite is boring, well-understood, and bulletproof for this scale
-4. Drizzle's migration story is straightforward
-
-We'll wrap queries in a thin repository layer so we can swap to WatermelonDB later if reactivity becomes painful.
-
-## Consequences
-
-- Need to set up a custom reactive layer (probably TanStack Query with SQLite as the source)
-- Migrations live in `db/migrations/` as numbered SQL files
-- All DB access goes through `repositories/` — no raw SQL in components
+- Components never touch storage directly — only store actions and selectors — so moving to Option B later only changes the store module.
+- Revisit if: history grows past ~10 MB, startup hydration exceeds ~300 ms on low-end devices, or we add sync (row-level changes become valuable).
+- The persisted store has a `version` field; use zustand's `migrate` for shape changes.

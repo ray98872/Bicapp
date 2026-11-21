@@ -2,61 +2,60 @@
 
 A living document. Phases are intentionally small so progress stays visible.
 
-## Phase 0 — Scaffolding ✅ (current)
+## Phase 0 — Scaffolding ✅
 
-- [x] Create repo
-- [x] README, LICENSE, .gitignore, CONTRIBUTING
-- [ ] Initialize Expo project (`npx create-expo-app` with TypeScript template)
-- [ ] Configure NativeWind, Expo Router, ESLint, Prettier
-- [ ] Set up GitHub Actions CI (typecheck + lint on PR)
-- [ ] Decide on local DB (Drizzle/expo-sqlite vs WatermelonDB) — see [docs/adr/0001-local-database.md](./docs/adr/0001-local-database.md)
+- [x] Repo, README, LICENSE, .gitignore, CONTRIBUTING
+- [x] Expo SDK 56 + TypeScript + Expo Router + ESLint (React Compiler on)
+- [x] Local storage decision — see [ADR-0001](./docs/adr/0001-local-database.md)
+- [ ] GitHub Actions CI (typecheck + lint on PR)
 
-## Phase 1 — Core logging loop (the MVP)
+## Phase 1 — Core logging loop ✅
 
-The loop a user does on day one: pick a workout → log sets → see history.
+- [x] Home with "Start empty workout" + templates
+- [x] Workout screen: weight / reps / time, set types, previous column, add / remove / reorder / replace exercises
+- [x] Rest timer with haptics (timestamp-based, survives backgrounding)
+- [x] Workout summary screen with PR detection
+- [x] Workout history list + detail (repeat, save as template, delete)
+- [x] Local persistence; in-progress workout restored after restart
 
-- [ ] Onboarding (3 screens: goal, experience, units)
-- [ ] Home screen with "Start Workout" CTA
-- [ ] Workout screen with big-tap set logger (weight / reps / RPE)
-- [ ] Rest timer with haptics
-- [ ] Workout summary screen
-- [ ] Workout history list
-- [ ] Local persistence of workouts, exercises, sets
+## Phase 2 — Templates & programmes ✅
 
-## Phase 2 — Guided programs
+- [x] Unlimited user templates (create / edit / duplicate / folders / delete)
+- [x] 12 built-in programmes (Full Body, 5×5, PPL, Upper/Lower, Dumbbell, Bodyweight, Core)
+- [x] Update template from a finished workout
+- [ ] Auto-suggest next workout in a programme rotation
+- [ ] Progression / deload rules per programme
 
-- [ ] Built-in beginner programs: StrongLifts 5x5, Starting Strength, simple PPL
-- [ ] Program picker on home screen
-- [ ] Auto-suggest next workout based on program progress
-- [ ] Deload / progression rules per program
+## Phase 3 — Exercise library ✅
 
-## Phase 3 — Exercise library with visuals
-
-- [ ] Exercise database (~150 movements, tagged by muscle group & equipment)
-- [ ] Short looping demo per exercise (Lottie or short mp4)
-- [ ] Tips & common-mistake notes per exercise
+- [x] 870+ exercises (Free Exercise DB) with search + muscle / equipment filters
+- [x] Step-by-step instructions, animated demo, muscles, beginner tips
+- [x] Video tutorial for every exercise (YouTube search fallback + curated overrides)
+- [x] Custom exercises
+- [ ] Curate a pinned video for the top 50 exercises
+- [ ] Bundle images for full offline use (optional download pack)
 - [ ] Substitute / alternate exercise suggestions
 
-## Phase 4 — Progress & PRs
+## Phase 4 — Progress ✅ (basic)
 
-- [ ] Per-exercise progress chart (weight × reps over time)
-- [ ] 1RM estimate (Epley formula)
-- [ ] PR celebrations (animated, opt-in haptics)
-- [ ] Body-weight & measurements tracking (optional)
+- [x] Per-exercise history + estimated 1RM chart (Epley)
+- [x] Personal records
+- [ ] Body-weight & measurements
+- [ ] Weekly volume per muscle group
 
 ## Phase 5 — Polish & ship
 
-- [ ] Onboarding copy review
-- [ ] Accessibility pass (font scaling, screen reader)
-- [ ] Dark mode
-- [ ] Backup / export to JSON & CSV
-- [ ] iOS TestFlight & Android internal track
-- [ ] Public 1.0 release
+- [x] Dark mode
+- [x] Export / import JSON backup
+- [ ] Onboarding (goal, experience, units, equipment → recommended programme)
+- [ ] CSV export (Strong-compatible) and Strong CSV import
+- [ ] Accessibility pass (font scaling, screen reader labels)
+- [ ] Notifications when rest ends with app in background
+- [ ] iOS TestFlight & Android internal track → public 1.0
 
-## Later (not v1)
+## Later
 
-- Optional cloud sync (self-hostable backend; Supabase-compatible)
-- Apple Health & Google Fit integration
-- Watch companion (Apple Watch / Wear OS)
-- Social / sharing
-- AI form-check from short video clips
+- Optional self-hostable sync
+- Apple Health / Health Connect
+- Watch companion
+- Plate calculator, supersets
