@@ -2,7 +2,20 @@
 
 > An open-source, fluid alternative to the STRONG app — making the gym easy for people who don't love the gym.
 
+[![Latest release](https://img.shields.io/github/v/release/ray98872/Bicapp)](https://github.com/ray98872/Bicapp/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+
 Bicapp is a cross-platform (iOS + Android + web) workout tracker. No paywalls, no accounts, no template limits. Just a fast workout logger with a guide for every exercise.
+
+## Download
+
+**Android:** grab the latest `.apk` from the [Releases page](https://github.com/ray98872/Bicapp/releases/latest).
+
+1. Download `bicapp-vX.Y.Z.apk` on your phone.
+2. Open it. If Android warns about unknown sources, tap **Settings**, allow your browser to install apps, then go back and tap **Install**.
+3. Updating? Install the new APK over the old one — your workouts are kept.
+
+**iOS:** not published yet. You can run it with Expo Go (see *Getting started*).
 
 ## Features
 
@@ -18,12 +31,38 @@ Bicapp is a cross-platform (iOS + Android + web) workout tracker. No paywalls, n
 
 ## Getting started
 
+Requires Node 20+ and [Expo Go](https://expo.dev/go) for **SDK 58** on your phone.
+
 ```bash
+git clone https://github.com/ray98872/Bicapp.git
+cd Bicapp
 npm install
 npx expo start
 ```
 
 Press `a` for Android, `i` for iOS, `w` for web, or scan the QR code with Expo Go.
+
+## Building an APK
+
+Builds run on Expo's free cloud build service (EAS), so you don't need Android Studio.
+
+```bash
+npx eas-cli@latest login          # opens your browser (GitHub login works)
+npx eas-cli@latest build -p android --profile preview
+```
+
+When it finishes you get a download link for the `.apk`. Profiles live in [`eas.json`](./eas.json):
+
+| Profile | Output | Use |
+|---|---|---|
+| `preview` | `.apk` | Sideloading / GitHub releases |
+| `production` | `.aab` | Google Play Store |
+
+### Releasing
+
+1. Bump `version` (and `android.versionCode`) in `app.json`.
+2. Build with the `preview` profile and download the APK.
+3. Create a GitHub release tagged `vX.Y.Z` and attach the APK as `bicapp-vX.Y.Z.apk`.
 
 Useful scripts:
 
@@ -61,7 +100,7 @@ Exercise data and images: [Free Exercise DB](https://github.com/yuhonas/free-exe
 
 ## Status
 
-V1 feature set is implemented. See [ROADMAP.md](./ROADMAP.md).
+**v1.0.0 released.** The V1 feature set is implemented — see [ROADMAP.md](./ROADMAP.md) for what's next. Contributions welcome: see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
